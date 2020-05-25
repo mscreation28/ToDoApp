@@ -16,9 +16,9 @@
         android:layout_height="wrap_content"
         android:layout_weight="75"
         android:id="@+id/item_name"
-        android:textSize="23sp"
+        android:textSize="20sp"
         android:lines="1"
-        android:text="Hello Title"
+        android:text="Hello Task"
         android:padding="10dp"
         android:textColor="#000" />
 
