@@ -39,6 +39,8 @@ public class ToDoFrag extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mItemRepository = new ItemRepository(this.getContext());
+
+
 //        insertFackItem();
         retriveToDo();
     }
