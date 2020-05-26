@@ -3,16 +3,27 @@ package com.example.todoapplication.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "items")
 public class Item implements Parcelable {
 
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @ColumnInfo(name = "itemname")
     private String item;
 
+    @ColumnInfo(name = "timestamp")
     private String timestamp;
 
+    @ColumnInfo(name = "done",defaultValue = "0")
     private int done;
 
+    @Ignore
     public Item() {
     }
 
@@ -68,6 +79,10 @@ public class Item implements Parcelable {
     }
 
     public int isDone() {
+        return done;
+    }
+
+    public int getDone() {
         return done;
     }
 
