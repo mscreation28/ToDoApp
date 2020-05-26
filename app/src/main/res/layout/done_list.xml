@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:weightSum="100">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"/>
+    <CheckBox
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="10"
+        android:id="@+id/chbox"
+        android:buttonTint="@color/colorPrimaryDark">
+
+    </CheckBox>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="85"
+        android:id="@+id/item_name"
+        android:textSize="20sp"
+        android:lines="1"
+        android:text="Hello Task"
+        android:padding="15dp"
+        android:textColor="#000" />
+
+
+</LinearLayout>
