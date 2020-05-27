@@ -1,11 +1,19 @@
 package com.example.todoapplication.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,11 +27,12 @@ import com.example.todoapplication.R;
 import com.example.todoapplication.adapter.ToDoAdapter;
 import com.example.todoapplication.models.Item;
 import com.example.todoapplication.persistence.ItemRepository;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoFrag extends Fragment {
+public class ToDoFrag extends Fragment{
 
     private static final String TAG = "ToDoFrag";
 
@@ -33,20 +42,28 @@ public class ToDoFrag extends Fragment {
     private ToDoAdapter mToDoAdapter;
     private CoordinatorLayout mCoordinatorLayout;
 
+    private EditText mEditText;
+
+    private boolean enabled=false;
+
     private ItemRepository mItemRepository;
+
+    private InputMethodManager mImm;
+    private FloatingActionButton mFab;
+
+    private Context mContext;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mItemRepository = new ItemRepository(this.getContext());
-
-
 //        insertFackItem();
         retriveToDo();
     }
 
     View v;
-    public ToDoFrag() {
+    public ToDoFrag(Context context) {
+        mContext = context;
     }
 
     @Nullable
@@ -54,7 +71,43 @@ public class ToDoFrag extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.todo_layout,container,false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycle_view);
+        mImm = (InputMethodManager) mContext.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int heightdiff = mRecyclerView.getRootView().getHeight() - mRecyclerView.getHeight();
+                Log.d(TAG, "onGlobalLayout: "+heightdiff);
+                if (heightdiff > 500) {
+                    Log.d(TAG, "onGlobalLayout: keyboard open");
+                    if(enabled == false) {
+                        enabled = true;
+                    }
+
+                } else {
+                    Log.d(TAG, "onGlobalLayout: keyboard closed");
+                    if(enabled == true) {
+                        disableContentInteraction();
+                        enabled = false;
+                    }
+
+                }
+            }
+        });
+
         mCoordinatorLayout = v.findViewById(R.id.coordinator_layout_todo);
+        mEditText = v.findViewById(R.id.new_todo);
+
+        mFab=v.findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                mEditText = (EditText)v.findViewById(R.id.new_todo);
+                mEditText.setVisibility(View.VISIBLE);
+                enableContentInteraction();
+//                enabled = true;
+                Log.d(TAG, "onClick: Hello");
+            }
+        });
 
         initRecyclerView();
         return v;
@@ -94,4 +147,39 @@ public class ToDoFrag extends Fragment {
             }
         });
     }
+
+
+
+    private void enableContentInteraction() {
+        mEditText.setKeyListener(new EditText(this.getContext()).getKeyListener());
+        mEditText.requestFocus();
+        mEditText.setFocusedByDefault(true);
+        mEditText.setFocusable(true);
+        mEditText.setFocusableInTouchMode(true);
+        mEditText.setCursorVisible(true);
+        mFab.setVisibility(View.GONE);
+//        mEditText.setEnabled(true);
+//        enabled = true;
+        Log.d(TAG, "enableContentInteraction: ");
+        mImm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        Log.d(TAG, "enableContentInteraction: "+mImm);
+//        enabled = true;
+    }
+
+    private void disableContentInteraction() {
+
+        mEditText.setVisibility(View.GONE);
+        mFab.setVisibility(View.VISIBLE);
+        hideSoftKeyboard();
+        mFab.setEnabled(true);
+//        enabled = false;
+        Log.d(TAG, "disableContentInteraction: gyftft");
+    }
+
+    private void hideSoftKeyboard() {
+        View view = new View(mContext);
+        Log.d(TAG, "hideSoftKeyboard: hide keyboard");
+        mImm.hideSoftInputFromWindow(view.getWindowToken(),0);
+    }
+
 }
