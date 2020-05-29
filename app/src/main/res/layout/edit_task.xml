@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="match_parent">
+
+            <include layout="@layout/edit_toolbar">
+            </include>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foregroundTint="@color/colorPrimaryDark"
+        android:id="@+id/edit_task_text"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:padding="15dp"
+        android:textCursorDrawable="@drawable/ic_custom_cursor_24dp">
+
+    </EditText>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fab_edit"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_check_black_24dp"
+        android:backgroundTint="@color/gray"
+        android:layout_margin="16dp"
+        app:borderWidth="0dp"
+        android:visibility="visible"
+        app:fabSize="auto"/>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

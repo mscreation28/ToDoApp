@@ -30,10 +30,13 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder2> {
     private ItemRepository mItemRepository;
     private CoordinatorLayout mCoordinatorLayout;
 
-    public ToDoAdapter(ArrayList<Item> mItems, ItemRepository itemRepository, CoordinatorLayout coordinatorLayout) {
+    private OnTaskListner mOnTaskListner;
+
+    public ToDoAdapter(ArrayList<Item> mItems,OnTaskListner onTaskListner, ItemRepository itemRepository, CoordinatorLayout coordinatorLayout) {
         Log.d(TAG, "ToDoAdapter: counstructor");
         mItemRepository = itemRepository;
         mCoordinatorLayout = coordinatorLayout;
+        mOnTaskListner = onTaskListner;
         this.mItems = mItems;
     }
 
@@ -41,7 +44,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder2> {
     @Override
     public ToDoAdapter.ViewHolder2 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view,parent,false);
-        return new ViewHolder2(view);
+        return new ViewHolder2(view,mOnTaskListner);
     }
 
     @Override
@@ -59,11 +62,13 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder2> {
 
         private TextView item;
         private CheckBox chbx;
+        OnTaskListner onTaskListner;
 
-        private ViewHolder2(@NonNull View itemView) {
+        private ViewHolder2(@NonNull View itemView, OnTaskListner onTaskListner) {
             super(itemView);
             item = itemView.findViewById(R.id.item_name);
             chbx = itemView.findViewById(R.id.chbox);
+            this.onTaskListner = onTaskListner;
             itemView.setOnClickListener(this);
 //
             chbx.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +103,11 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder2> {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "onClick: Hii ");
+            onTaskListner.OnTaskClick(getAdapterPosition());
         }
+    }
+
+    public interface OnTaskListner {
+        void OnTaskClick(int position);
     }
 }

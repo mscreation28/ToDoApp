@@ -44,16 +44,12 @@ public class MainActivity extends AppCompatActivity{
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mImm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
 
-
-
         //Add Fragment
         mViewPagerAdapter.addFrag(new ToDoFrag(this),"ToDo");
         mViewPagerAdapter.addFrag(new DoneFrag(),"Done");
 
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-
-
 
         setSupportActionBar((androidx.appcompat.widget.Toolbar)findViewById(R.id.app_titlebar));
         setTitle("ToDo List");

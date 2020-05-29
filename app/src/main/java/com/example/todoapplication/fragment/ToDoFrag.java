@@ -2,6 +2,9 @@ package com.example.todoapplication.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -26,6 +29,11 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.example.todoapplication.EditActivity;
 import com.example.todoapplication.R;
 import com.example.todoapplication.adapter.ToDoAdapter;
 import com.example.todoapplication.models.Item;
@@ -36,7 +44,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoFrag extends Fragment{
+public class ToDoFrag extends Fragment implements ToDoAdapter.OnTaskListner{
 
     private static final String TAG = "ToDoFrag";
 
@@ -63,6 +71,7 @@ public class ToDoFrag extends Fragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mItemRepository = new ItemRepository(this.getContext());
+
 //        insertFackItem();
         retriveToDo();
     }
@@ -84,15 +93,15 @@ public class ToDoFrag extends Fragment{
             @Override
             public void onGlobalLayout() {
                 int heightdiff = mRecyclerView.getRootView().getHeight() - mRecyclerView.getHeight();
-                Log.d(TAG, "onGlobalLayout: "+heightdiff);
+//                Log.d(TAG, "onGlobalLayout: "+heightdiff);
                 if (heightdiff > 500) {
-                    Log.d(TAG, "onGlobalLayout: keyboard open");
+//                    Log.d(TAG, "onGlobalLayout: keyboard open");
                     if(enabled == false) {
                         enabled = true;
                     }
 
                 } else {
-                    Log.d(TAG, "onGlobalLayout: keyboard closed");
+//                    Log.d(TAG, "onGlobalLayout: keyboard closed");
                     if(enabled == true) {
                         disableContentInteraction();
                         enabled = false;
@@ -112,7 +121,7 @@ public class ToDoFrag extends Fragment{
                 mLinearLayout.setVisibility(View.VISIBLE);
                 enableContentInteraction();
 //                enabled = true;
-                Log.d(TAG, "onClick: Hello");
+//                Log.d(TAG, "onClick: Hello");
             }
         });
 
@@ -129,9 +138,10 @@ public class ToDoFrag extends Fragment{
                 enabled = false;
                 disableContentInteraction();
                 hideSoftKeyboard();
-                Log.d(TAG, "onClick: "+newtask+ LocalDateTime.now());
+//                Log.d(TAG, "onClick: "+newtask+ LocalDateTime.now());
             }
         });
+
 
         initRecyclerView();
         return v;
@@ -152,7 +162,7 @@ public class ToDoFrag extends Fragment{
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mToDoAdapter = new ToDoAdapter(mItems,mItemRepository,mCoordinatorLayout);
+        mToDoAdapter = new ToDoAdapter(mItems,this,mItemRepository,mCoordinatorLayout);
         mRecyclerView.setAdapter(mToDoAdapter);
         mToDoAdapter.notifyDataSetChanged();
     }
@@ -184,10 +194,10 @@ public class ToDoFrag extends Fragment{
         mFab.setVisibility(View.GONE);
 //        mEditText.setEnabled(true);
 //        enabled = true;
-        Log.d(TAG, "enableContentInteraction: ");
+//        Log.d(TAG, "enableContentInteraction: ");
         mImm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0);
 //        mImm.showSoftInput(getView(),InputMethodManager.SHOW_IMPLICIT);
-        Log.d(TAG, "enableContentInteraction: "+mImm);
+//        Log.d(TAG, "enableContentInteraction: "+mImm);
 //        enabled = true;
     }
 
@@ -199,14 +209,21 @@ public class ToDoFrag extends Fragment{
         mEditText.setText("");
         mFab.setEnabled(true);
 //        enabled = false;
-        Log.d(TAG, "disableContentInteraction: gyftft");
+//        Log.d(TAG, "disableContentInteraction: gyftft");
     }
 
     private void hideSoftKeyboard() {
 //        View view = new View(mContext);
 //        view =
-        Log.d(TAG, "hideSoftKeyboard: hide keyboard");
+//        Log.d(TAG, "hideSoftKeyboard: hide keyboard");
         mImm.hideSoftInputFromWindow(getView().getRootView().getWindowToken(),0);
     }
 
+
+    @Override
+    public void OnTaskClick(int position) {
+        Log.d(TAG, "OnTaskClick: item" + position);
+        Intent intent = new Intent(this.getActivity(), EditActivity.class);
+        startActivity(intent);
+    }
 }
