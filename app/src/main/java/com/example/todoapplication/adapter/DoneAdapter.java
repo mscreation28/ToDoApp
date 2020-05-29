@@ -30,17 +30,20 @@ public class DoneAdapter extends RecyclerView.Adapter<DoneAdapter.ViewHolder> {
     private CoordinatorLayout mCoordinatorLayout;
     private Item finalItem2 ;
 
-    public DoneAdapter(ArrayList<Item> mItems,ItemRepository itemRepository,CoordinatorLayout coordinatorLayout) {
+    private OnTaskListner mOnTaskListner;
+
+    public DoneAdapter(ArrayList<Item> mItems,OnTaskListner onTaskListner,ItemRepository itemRepository,CoordinatorLayout coordinatorLayout) {
         this.mItems = mItems;
         mItemRepository = itemRepository;
         mCoordinatorLayout = coordinatorLayout;
+        mOnTaskListner = onTaskListner;
     }
 
     @NonNull
     @Override
     public DoneAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.done_list,parent,false);
-        return new ViewHolder(view);
+        return new ViewHolder(view,mOnTaskListner);
     }
 
     @Override
@@ -59,12 +62,14 @@ public class DoneAdapter extends RecyclerView.Adapter<DoneAdapter.ViewHolder> {
 
         private TextView item;
         private CheckBox chbx;
+        OnTaskListner onTaskListner;
 
-        private ViewHolder(@NonNull View itemView) {
+        private ViewHolder(@NonNull View itemView,OnTaskListner onTaskListner) {
             super(itemView);
             item = itemView.findViewById(R.id.item_name);
             chbx = itemView.findViewById(R.id.chbox2);
             itemView.setOnClickListener(this);
+            this.onTaskListner = onTaskListner;
 //
             chbx.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -98,8 +103,11 @@ public class DoneAdapter extends RecyclerView.Adapter<DoneAdapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "onClick: Hii");
+            onTaskListner.OnTaskClick(getAdapterPosition());
         }
+    }
 
-
+    public interface OnTaskListner {
+        void OnTaskClick(int position);
     }
 }

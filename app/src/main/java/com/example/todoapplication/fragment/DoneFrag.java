@@ -1,5 +1,6 @@
 package com.example.todoapplication.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.todoapplication.EditActivity;
 import com.example.todoapplication.R;
 import com.example.todoapplication.adapter.DoneAdapter;
 import com.example.todoapplication.adapter.ToDoAdapter;
@@ -23,7 +25,7 @@ import com.example.todoapplication.persistence.ItemRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DoneFrag extends Fragment {
+public class DoneFrag extends Fragment implements DoneAdapter.OnTaskListner{
 
     private static final String TAG = "DoneFrag";
 
@@ -71,7 +73,7 @@ public class DoneFrag extends Fragment {
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mDoneAdapter = new DoneAdapter(mItems,mItemRepository,mCoordinatorLayout);
+        mDoneAdapter = new DoneAdapter(mItems,this,mItemRepository,mCoordinatorLayout);
         mRecyclerView.setAdapter(mDoneAdapter);
         mDoneAdapter.notifyDataSetChanged();
     }
@@ -89,5 +91,13 @@ public class DoneFrag extends Fragment {
                 mDoneAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void OnTaskClick(int position) {
+        Log.d(TAG, "OnTaskClick: item" + position);
+        Intent intent = new Intent(this.getActivity(), EditActivity.class);
+        intent.putExtra("task",mItems.get(position));
+        startActivity(intent);
     }
 }

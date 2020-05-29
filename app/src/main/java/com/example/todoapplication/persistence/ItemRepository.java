@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.todoapplication.async.DeleteAsyncTask;
 import com.example.todoapplication.async.InsertAsyncTask;
 import com.example.todoapplication.async.UpdateAsyncTask;
 import com.example.todoapplication.models.Item;
@@ -24,6 +25,10 @@ public class ItemRepository {
 
     public void updateItem(Item item) {
         new UpdateAsyncTask(mItemDatabase.getItemDao()).execute(item);
+    }
+
+    public void deleteItem(Item item) {
+        new DeleteAsyncTask(mItemDatabase.getItemDao()).execute(item);
     }
 
     public LiveData<List<Item>> retriveToDo() {

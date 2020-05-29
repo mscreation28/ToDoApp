@@ -224,6 +224,7 @@ public class ToDoFrag extends Fragment implements ToDoAdapter.OnTaskListner{
     public void OnTaskClick(int position) {
         Log.d(TAG, "OnTaskClick: item" + position);
         Intent intent = new Intent(this.getActivity(), EditActivity.class);
+        intent.putExtra("task",mItems.get(position));
         startActivity(intent);
     }
 }
